@@ -3,11 +3,11 @@
 **AUTHOR**  
 Bani Bedi
 
-**PUBLISHED**  
-April 3rd, 2024
-
 **CLASS**  
 Econ 481: Data Science in Economics
+
+**PUBLISHED**  
+April 3rd, 2024
 
 ## Summary: 
 This file contains the first coding assignment from Mr. Lukas Hager's Data Science in Economics (ECON 481) class. This assignment contains the following information:

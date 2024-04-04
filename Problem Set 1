@@ -92,11 +92,54 @@ def main():
         additional_keywords = str(input("Would you like to enter another keyword? (y/n): ")) # Asks the user to input another keyword, if desired
         if additional_keywords == "y": # If user says yes
             continue # Continue with the loop
-        if additional_keywords == "n": # If user says no
+        #if additional_keywords == "n": # If user says no
+        else:
             reverse_keywords = reverse(keywords) # Calls the reverse function to reverse the 'keywords' list
             print(f"The original list is {keywords} and the reversed list is {reverse_keywords}.") # Prints out both the original and the reversed 'keywords' list
             break # Exits the loop
         
 main()
 
+# Exercise 5
 
+def prob_k_heads(n: int, k: int) -> float:
+    """
+    This function takes natural numbers 'n' and 'k' with 'n>k' and returns the probability of getting 'k' heads from 'n' flips.
+    """
+    
+    # Calculate the factorial of n
+    factorial_n = 1
+    for i in range(1, n + 1):
+        factorial_n *= i
+
+    # Calculate the factorial of k
+    factorial_k = 1
+    for i in range(1, k + 1):
+        factorial_k *= i
+
+    # Calculate the factorial of (n - k)
+    factorial_n_k = 1
+    for i in range(1, n - k + 1):
+        factorial_n_k *= i
+
+    # Calculate the binomial coefficient (n choose k)
+    binomial_coefficient = factorial_n / (factorial_k * factorial_n_k)
+
+    # Calculate the probability
+    probability = binomial_coefficient * (0.5 ** n)
+
+    return probability
+
+def main():
+    while True:
+        n = int(input("Please input the number of coin flips desired: "))
+        k = int(input("Please input the number of heads desired: "))
+        if n >= k:
+            break
+        else:
+            print("Please ensure that the number of coin flips is greater than or equal to the number of heads desired.")
+
+    probability = prob_k_heads(n, k)
+    print(f"The probability of getting {k} heads from {n} flips is {probability}")
+
+main()

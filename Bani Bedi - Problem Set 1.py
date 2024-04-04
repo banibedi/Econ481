@@ -1,7 +1,7 @@
 # Exercise 0
 
 def github() -> str:
-
+    
     """
     This function will return Bani Bedi's GitHub page for Problem Set 1.
     """

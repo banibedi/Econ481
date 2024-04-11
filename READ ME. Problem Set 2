@@ -1,0 +1,18 @@
+# Problem Set 2
+
+**AUTHOR**  
+Bani Bedi
+
+**CLASS**  
+Econ 481: Data Science in Economics
+
+**PUBLISHED**  
+April 10th, 2024
+
+## Summary: 
+This file contains the second coding assignment from Mr. Lukas Hager's Data Science in Economics (ECON 481) class. This assignment contains the following information:
+
+1. How to access Bani Bedi's GitHub page that showcases the assignment
+2. Creating a function that returns 1000 simulated observations from an equation to deepen understanding of mathematical configurations and the python function 'seed'
+3. Estimating the MLE parameters of a closed form function
+4. Minimizing Residual Sum of Squares with scipy.optimize.mnimize to find a set of beta coefficients that makes our model's predictions as close to the observed data as possible

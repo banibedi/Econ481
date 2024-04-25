@@ -1,0 +1,19 @@
+# Problem Set 4
+
+**AUTHOR**  
+Bani Bedi
+
+**CLASS**  
+Econ 481: Data Science in Economics
+
+**PUBLISHED**  
+April 25th, 2024
+
+## Summary: 
+This file contains the first coding assignment from Mr. Lukas Hager's Data Science in Economics (ECON 481) class. This assignment contains the following information:
+
+1. How to access Bani Bedi's GitHub page that showcases the assignment
+2. Assessing Tesla's stock price history from course website
+3. Writing a function called 'plot_close' which takes the output of load_data and an option start and end date, and plots the closing price of the stock between those dates as a line graph
+4. Performing a regression to test the random walk hypothesis on Tesla's stock price histpry and returning a t-statistic for the B0 coeffficient from the regression
+5. Taking the output from Exercise 1 and returning a t-statistic on B0 from the logistic regression

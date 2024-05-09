@@ -1,0 +1,17 @@
+# Problem Set 5
+
+**AUTHOR**  
+Bani Bedi
+
+**CLASS**  
+Econ 481: Data Science in Economics
+
+**PUBLISHED**  
+May 8th, 2024
+
+## Summary: 
+This file contains the fifth coding assignment from Mr. Lukas Hager's Data Science in Economics (ECON 481) class. This assignment contains the following information:
+
+1. This function scrapes code from any URL of your choice, in this case Mr. Lukas Hanger's lecture URL
+2. It scrapes any Python code in the lecture and adds it to a file on the user's desktop
+3. Any syntax errors that may occur in this process are also handled properly

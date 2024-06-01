@@ -1,0 +1,17 @@
+# Problem Set 6
+
+**AUTHOR**  
+Bani Bedi
+
+**CLASS**  
+Econ 481: Data Science in Economics
+
+**PUBLISHED**  
+June 1st, 2024
+## Summary: 
+This file contains the last coding assignment from Mr. Lukas Hager's Data Science in Economics (ECON 481) class. This assignment contains the following information:
+
+1. Outputs a table with an itemId and std column
+2. Outputs a table with four variables: bidderName, tota_spend, total_bids, and spend_frac.
+3. Writes a function called min_increment_freq that returns a query against auctions.db that outputs a table with one column.
+4. Writes a function called win_perc_by_timestamp that returns a SQL quesry that can be run against the auctions.db data that outputs a table with two columns.

@@ -76,7 +76,7 @@ conn.close()
 # Function to generate the std SQL query
 def std() -> str:
      """
-    Outputs a table with an itenId and a std column.
+    Outputs a table with an itemId and a std column.
     Calculates standard deviation.
     """
     query = """
@@ -178,7 +178,7 @@ print(results)
 def min_increment_freq() -> str:
     """
     Writes a function called min_increment_freq.
-    Returns a queryagaist auctions.db that outputs a table with one column.
+    Returns a query against auctions.db that outputs a table with one column.
     Excludes items where isBuyNowUsed=1.
     """
     query = """

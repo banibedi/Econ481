@@ -1,0 +1,20 @@
+
+# Problem Set 3
+
+**AUTHOR**  
+Bani Bedi
+
+**CLASS**  
+Econ 481: Data Science in Economics
+
+**PUBLISHED**  
+June 1st, 2024
+
+## Summary: 
+This file contains the third coding assignment from Mr. Lukas Hager's Data Science in Economics (ECON 481) class. This assignment contains the following information:
+
+1. Imports yearly data from the 'Direct Emitters" tab, concatenates it into a single DataFrame, and adds a year column.
+2. The function "import_parent_companies" takes a list of years and returns a concatenated DataFrame of the corresponding tabs in the parent companies excel sheet.
+3. Writes a function called n_null that takes a dataframe and column name and returns an integer that shows you the number of null values in that column.
+4. Writes a function called clean_data that takes the data frame of emissions sheets and parent companies and outputs a dataframe, and rearranges them in a specific format.
+5. Writes a function called aggregate_emissions which takes the dataframe from exercise 4, produces statistical values, aggregates total reported direct emissions and parent co. ownership by state level, and returns the data sorted by highest to lowerst mean total reported direct emissions. 

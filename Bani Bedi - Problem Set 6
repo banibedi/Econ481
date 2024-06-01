@@ -1,0 +1,288 @@
+# Exercise 0
+
+def github() -> str:
+
+    """
+    This function will return Bani Bedi's GitHub page for Problem Set 1.
+    """
+
+    return "https://github.com/banibedi/Econ481.git"
+
+# Exercise 1
+import pandas as pd
+import requests
+import sqlite3
+
+def download_sqlite_db(url, save_path):
+    # Send a GET request to the URL to download the database file
+    response = requests.get(url)
+    if response.status_code == 200:
+        # Write the content of the response to a local file
+        with open(save_path, 'wb') as f:
+            f.write(response.content)
+            return True
+    return False
+
+download_sqlite_db("https://lukashager.netlify.app/econ-481/data/auctions.db", "auctions.db")
+
+conn = sqlite3.connect("auctions.db")
+cursor = conn.cursor()
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+
+# Fetch all rows from the result
+tables = cursor.fetchall()
+
+# Print the table names
+for table in tables:
+    print(table[0])
+
+print("printing out items")
+cursor.execute("PRAGMA table_info({});".format("items"))
+
+# Fetch all rows from the result
+columns = cursor.fetchall()
+
+# Print the column names
+for column in columns:
+    print(column[1], ' ', end='')
+print()
+
+cursor.execute("SELECT * FROM items LIMIT 10;")
+
+items = cursor.fetchall()
+for i in items:
+    print(i)
+
+print("printing out bids")
+cursor.execute("PRAGMA table_info({});".format("bids"))
+
+# Fetch all rows from the result
+columns = cursor.fetchall()
+
+# Print the column names
+for column in columns:
+    print(column[1], ' ', end='')
+print()
+
+cursor.execute("SELECT * FROM bids LIMIT 10;")
+
+bids = cursor.fetchall()
+for b in bids:
+    print(b)
+
+# Close the connection to the SQLite database
+conn.close()
+
+# Function to generate the std SQL query
+def std() -> str:
+     """
+    Outputs a table with an itenId and a std column.
+    Calculates standard deviation.
+    """
+    query = """
+    SELECT
+        itemId,
+        SQRT(SUM((bidAmount - avg_bidAmount) * (bidAmount - avg_bidAmount)) / (COUNT(*) - 1)) AS std
+    FROM (
+        SELECT
+            itemId,
+            bidAmount,
+            AVG(bidAmount) OVER (PARTITION BY itemId) AS avg_bidAmount
+        FROM
+            bids
+    )
+    GROUP BY
+        itemId
+    HAVING
+        COUNT(*) > 1;
+    """
+    return query
+
+# Generate the SQL query
+query = std()
+
+conn = sqlite3.connect("auctions.db")
+cursor = conn.cursor()
+cursor.execute(query)
+
+# Fetch all rows from the result
+results = cursor.fetchall()
+
+# Display the results
+print(results)
+
+# Exercise 2
+def bidder_spend_frac() -> str:
+    """
+    Outputs a table with four variables: bidderName, tota_spend, total_bids, and spend_frac.
+    """
+    query = """
+    WITH MaxBids AS (
+        SELECT
+            bidderName,
+            itemId,
+            MAX(bidAmount) AS maxBidAmount
+        FROM
+            bids
+        GROUP BY
+            bidderName, itemId
+    ),
+    TotalSpend AS (
+        SELECT
+            highBidderName AS bidderName,
+            SUM(bidAmount) AS total_spend
+        FROM
+            bids
+        WHERE
+            isBuyerHighBidder = 1
+        GROUP BY
+            highBidderName
+    ),
+    TotalBids AS (
+        SELECT
+            bidderName,
+            SUM(maxBidAmount) AS total_bids
+        FROM
+            MaxBids
+        GROUP BY
+            bidderName
+    )
+    SELECT
+        tb.bidderName,
+        COALESCE(ts.total_spend, 0) AS total_spend,
+        tb.total_bids,
+        CASE WHEN tb.total_bids > 0 THEN COALESCE(ts.total_spend, 0) * 1.0 / tb.total_bids ELSE 0 END AS spend_frac
+    FROM
+        TotalBids tb
+    LEFT JOIN
+        TotalSpend ts ON tb.bidderName = ts.bidderName
+    WHERE
+        tb.total_bids > 0;
+    """
+    return query
+
+# Generate the SQL query
+query = bidder_spend_frac()
+
+conn = sqlite3.connect("auctions.db")
+cursor = conn.cursor()
+cursor.execute(query)
+
+# Fetch all rows from the result
+results = cursor.fetchall()
+
+# Display the results
+print(results)
+
+# Exercise 3
+def min_increment_freq() -> str:
+    """
+    Writes a function called min_increment_freq.
+    Returns a queryagaist auctions.db that outputs a table with one column.
+    Excludes items where isBuyNowUsed=1.
+    """
+    query = """
+    WITH RankedBids AS (
+        SELECT
+            b.itemId,
+            b.bidAmount,
+            b.bidTime,
+            i.bidIncrement,
+            ROW_NUMBER() OVER (PARTITION BY b.itemId ORDER BY b.bidTime) AS rn
+        FROM
+            bids b
+        JOIN
+            items i ON b.itemId = i.itemId
+        WHERE
+            i.isBuyNowUsed = 0
+    ),
+    PrevBids AS (
+        SELECT
+            rb1.itemId,
+            rb1.bidAmount,
+            rb1.bidIncrement,
+            rb1.bidTime,
+            rb1.rn,
+            rb2.bidAmount AS prevBidAmount
+        FROM
+            RankedBids rb1
+        LEFT JOIN
+            RankedBids rb2 ON rb1.itemId = rb2.itemId AND rb1.rn = rb2.rn + 1
+    )
+    SELECT
+        ROUND(CAST(SUM(CASE WHEN (pb.bidAmount - pb.prevBidAmount) = pb.bidIncrement THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*), 4) AS freq
+    FROM
+        PrevBids pb
+    WHERE
+        pb.prevBidAmount IS NOT NULL;
+    """
+    return query
+
+# Generate the SQL query
+query = min_increment_freq()
+
+conn = sqlite3.connect("auctions.db")
+cursor = conn.cursor()
+cursor.execute(query)
+
+# Fetch all rows from the result
+results = cursor.fetchall()
+
+# Display the results
+print(results)
+
+#  Exercise 4
+def win_perc_by_timestamp() -> str:
+    """
+    Write a function called win_perc_by_timestamp
+    It returns a SQL query that can be run against the auctions.db data that outputs a table.
+    The two columns in this tables are timestamp_bin and win_perc.
+    """
+    query = """
+    WITH NormalizedBids AS (
+        SELECT
+            b.itemId,
+            b.bidTime,
+            b.isBuyerHighBidder,
+            i.startTime,
+            i.endTime,
+            1 + CAST(10 * (CAST(b.bidTime AS FLOAT) - CAST(i.startTime AS FLOAT)) / (CAST(i.endTime AS FLOAT) - CAST(i.startTime AS FLOAT)) AS INTEGER) AS timestamp_bin
+        FROM
+            bids b
+        JOIN
+            items i ON b.itemId = i.itemId
+        WHERE
+            i.endTime > i.startTime
+    ),
+    WinPercByBin AS (
+        SELECT
+            timestamp_bin,
+            AVG(CASE WHEN isBuyerHighBidder = 1 THEN 1 ELSE 0 END) AS win_perc
+        FROM
+            NormalizedBids
+        GROUP BY
+            timestamp_bin
+    )
+    SELECT
+        timestamp_bin,
+        ROUND(win_perc, 4) AS win_perc
+    FROM
+        WinPercByBin
+    ORDER BY
+        timestamp_bin;
+    """
+    return query
+
+# Generate the SQL query
+query = win_perc_by_timestamp()
+
+conn = sqlite3.connect("auctions.db")
+cursor = conn.cursor()
+cursor.execute(query)
+
+# Fetch all rows from the result
+results = cursor.fetchall()
+
+# Display the results
+print(results)
+

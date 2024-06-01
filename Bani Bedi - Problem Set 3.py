@@ -62,7 +62,7 @@ print(company_data)
 # Exercise 3
 def n_null(df: pd.DataFrame, col: str) -> int:
     """
-    Some docstrings
+    Write a function called n_null that takes a dataframe and column name and returns an integer that shows you the number of null values in that column.
     """
     return df[col].isnull().sum()
 
@@ -71,6 +71,13 @@ print(n_null(company_data, 'GHGRP FACILITY ID'))
 
 # Exercise 4
 def clean_data(emissions_data: pd.DataFrame, parent_data: pd.DataFrame) -> pd.DataFrame:
+     """
+    Write a function called clean_data.
+    This takes the data frame of emissions sheets and parent companies and outputs a dataframe.
+    ALl columns are lower case.
+    Subsets the data on a specific threshold.
+    Rearranages the data in a specific format.
+    """
     # Left join the parent companies data onto the EPA data
     merged_data = pd.merge(emissions_data, parent_data,
                            left_on=['Facility Id', 'year'],
@@ -92,6 +99,12 @@ print(cleaned_data)
 
 # Exercise 5
 def aggregate_emissions(cleaned_data: pd.DataFrame, group_vars: list) -> pd.DataFrame:
+     """
+    Write a function called aggregate_emissions.
+    Takes the dataframe from Exercise 4 and a list of variables and produces statitistical values.
+    Aggregates total reported direct emissions and parent co. ownership by state level.
+    Returns data sorted by highest to lowest mean total reported direct emissions.
+    """
     # Group by the specified variables and calculate the required statistics
     aggregated_data = cleaned_data.groupby(group_vars).agg(
         min_total_reported_direct_emissions=('total reported direct emissions', 'min'),
